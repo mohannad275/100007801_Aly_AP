@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Automated Pencil Production Line - SRH Advanced Programming Project">
+  <title>Automated Pencil Production Line | Mohannad Aly</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="hero">
+    <nav><a class="logo" href="#top">PL<span>.</span></a><div><a href="#project">Project</a><a href="#architecture">Architecture</a><a href="https://github.com/mohannadahmednabil/100007801_Aly_AP">Source code</a></div></nav>
+    <div class="hero-content" id="top">
+      <p class="kicker">SRH UNIVERSITY · ADVANCED PROGRAMMING · JUNE 2026</p>
+      <h1>Automated Pencil<br><span>Production Line</span></h1>
+      <p class="lead">A complete manufacturing simulation with a Python backend, browser-based HMI, InfluxDB telemetry, Grafana monitoring, quality control, and machine-fault handling.</p>
+      <div class="actions"><a class="primary" href="https://github.com/mohannadahmednabil/100007801_Aly_AP">View repository</a><a href="#project">Explore project ↓</a></div>
+      <div class="meta"><div><strong>6</strong><span>Assembly stations</span></div><div><strong>5</strong><span>Quality checkpoints</span></div><div><strong>3</strong><span>Docker services</span></div></div>
+    </div>
+  </header>
+
+  <main>
+    <section class="intro" id="project">
+      <div><p class="kicker">PROJECT OVERVIEW</p><h2>From raw body to inspected pencil</h2></div>
+      <div class="copy">
+        <p>The program simulates a six-stage pencil assembly line: wooden-body feeding, graphite insertion, ferrule installation, eraser insertion, final quality inspection, and sorting. Each product receives simulated sensor measurements and is marked as good or defective with a specific rejection reason.</p>
+        <p>The operator uses a responsive industrial HMI with Start, Stop, Reset, Acknowledge, and Emergency Stop controls. The interface shows the active stage, machine condition, yield, temperature, cycle time, product history, alarms, and a real-time event log.</p>
+      </div>
+    </section>
+
+    <section class="showcase">
+      <div class="image-card"><img src="images/hmi_dashboard.png" alt="Browser-based industrial HMI for the pencil production line"><span>01 · Browser-based control HMI</span></div>
+    </section>
+
+    <section class="architecture" id="architecture">
+      <div class="copy">
+        <p>Python implements the state machine and exposes a JSON API while a separate background worker sends line-protocol telemetry to InfluxDB. Grafana is automatically provisioned with panels for temperature, output, rejected products, first-pass yield, machine state, and cycle time.</p>
+        <p>Docker Compose starts the application, database, and dashboard as one reproducible system. The repository also contains automated tests, persistent volumes, environment configuration, documentation, and a GitHub Actions workflow that publishes this website through GitHub Pages.</p>
+      </div>
+      <div class="image-card light"><img src="images/system_architecture.png" alt="System architecture diagram"><span>02 · System architecture and data path</span></div>
+    </section>
+  </main>
+
+  <footer><div><strong>Mohannad Aly</strong><span>Student ID 100007801</span></div><div><span>Applied Mechatronics</span><span>SRH University</span></div></footer>
+</body>
+</html>
