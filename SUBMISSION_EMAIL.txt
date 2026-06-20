@@ -1,0 +1,17 @@
+Subject: 100007801_Aly_AP
+
+Dear Professor Pozo,
+
+Please find attached my Advanced Programming final project report, titled “100007801_Aly_AP”.
+
+Project website:
+https://mohannadahmednabil.github.io/100007801_Aly_AP/
+
+GitHub repository:
+https://github.com/mohannadahmednabil/100007801_Aly_AP
+
+The project implements an automated pencil production line with a Python backend, browser-based HMI, InfluxDB database, Grafana dashboard, product quality control, and fault handling.
+
+Best regards,
+Mohannad Aly
+Student ID: 100007801

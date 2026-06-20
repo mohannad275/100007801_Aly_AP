@@ -1,0 +1,33 @@
+Automated Pencil Production Line - Validation Results
+Student ID: 100007801
+
+Automated tests
+---------------
+Command: python run_tests.py
+Result: PASS
+Tests executed: 8
+
+Validated areas:
+1. Start command and completed production cycle
+2. Stop and reset behavior
+3. Emergency-stop acknowledgement requirement
+4. Settings input validation
+5. Injected machine fault
+6. Status JSON API
+7. Start JSON API
+8. Static HMI delivery
+
+Additional validation
+---------------------
+- Python source compilation: PASS
+- Grafana dashboard JSON parsing: PASS
+- Word report rendered to PDF: PASS
+- Report page count: 13
+- All rendered report pages visually inspected: PASS
+
+Environment limitation
+----------------------
+Docker was not available in the artifact-building environment, so the
+Docker stack was validated by source/configuration review rather than by
+starting containers here. The Python application and API were executed
+and tested directly.
