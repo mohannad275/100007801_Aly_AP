@@ -21,6 +21,7 @@ Additional validation
 ---------------------
 - Python source compilation: PASS
 - Grafana dashboard JSON parsing: PASS
+- InfluxDB HTTP writer against a local mock endpoint: PASS
 - Word report rendered to PDF: PASS
 - Report page count: 13
 - All rendered report pages visually inspected: PASS
