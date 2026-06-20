@@ -4,7 +4,7 @@ The complete repository is already initialized with Git history and includes a G
 
 ## 1. Create the repository
 
-While logged into GitHub as `mohannadahmednabil`, create a new **public** repository named:
+While logged into GitHub as `mohannad275`, create a new **public** repository named:
 
 `100007801_Aly_AP`
 
@@ -15,7 +15,7 @@ Create it empty. Do not add a README, `.gitignore`, or license on GitHub because
 Open Terminal in the project folder and run:
 
 ```bash
-git remote add origin https://github.com/mohannadahmednabil/100007801_Aly_AP.git
+git remote add origin https://github.com/mohannad275/100007801_Aly_AP.git
 git branch -M main
 git push -u origin main
 ```
@@ -33,11 +33,11 @@ In the new repository:
 
 The website will then be available at:
 
-`https://mohannadahmednabil.github.io/100007801_Aly_AP/`
+`https://mohannad275.github.io/100007801_Aly_AP/`
 
 The repository will be available at:
 
-`https://github.com/mohannadahmednabil/100007801_Aly_AP`
+`https://github.com/mohannad275/100007801_Aly_AP`
 
 ## 4. Final submission
 

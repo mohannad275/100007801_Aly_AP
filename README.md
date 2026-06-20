@@ -38,8 +38,6 @@ Open:
 Default Grafana login: `admin` / `PencilGrafana2026!`  
 Default InfluxDB login: `admin` / `PencilLine2026!`
 
-These are local demonstration credentials. Change them before any network-accessible deployment.
-
 Stop the stack with:
 
 ```bash
@@ -95,7 +93,7 @@ Dockerfile                       Container image for the Python HMI
 
 The repository contains `.github/workflows/pages.yml`. Create a GitHub repository named `100007801_Aly_AP`, push this project to the `main` branch, then select **Settings → Pages → Source: GitHub Actions**. The expected site address is:
 
-`https://mohannadahmednabil.github.io/100007801_Aly_AP/`
+`https://mohannad275.github.io/100007801_Aly_AP/`
 
 ## AI disclosure
 
