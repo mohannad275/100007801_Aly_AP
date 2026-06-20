@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Industrial HMI for an automated pencil assembly line">
+  <title>PencilLine HMI | SRH Advanced Programming</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">PL</div>
+        <div>
+          <p class="eyebrow">SRH ADVANCED PROGRAMMING</p>
+          <h1>PencilLine <span>Control HMI</span></h1>
+        </div>
+      </div>
+      <div class="top-status">
+        <div class="clock"><span id="clock">--:--:--</span><small>LOCAL TIME</small></div>
+        <div class="status-pill idle" id="statePill"><span class="pulse"></span><strong id="machineState">IDLE</strong></div>
+      </div>
+    </header>
+
+    <main>
+      <section class="control-strip panel">
+        <div class="control-group">
+          <p class="section-label">Machine controls</p>
+          <div class="button-row">
+            <button class="control start" data-action="start"><span>▶</span> Start</button>
+            <button class="control stop" data-action="stop"><span>■</span> Stop</button>
+            <button class="control reset" data-action="reset"><span>↻</span> Reset</button>
+            <button class="control acknowledge" data-action="acknowledge"><span>✓</span> Acknowledge</button>
+          </div>
+        </div>
+        <button class="e-stop" data-action="emergency-stop" aria-label="Emergency stop">
+          <span>EMERGENCY</span><strong>STOP</strong>
+        </button>
+      </section>
+
+      <section class="alert-banner hidden" id="alertBanner" role="alert">
+        <div><span class="alert-icon">!</span><div><strong>ACTIVE MACHINE FAULT</strong><p id="faultText"></p></div></div>
+        <button data-action="acknowledge">Acknowledge fault</button>
+      </section>
+
+      <section class="metrics-grid">
+        <article class="metric panel accent-blue">
+          <div class="metric-head"><span>Total output</span><b>#</b></div>
+          <strong id="totalCount">0</strong><small>pencils completed</small>
+        </article>
+        <article class="metric panel accent-green">
+          <div class="metric-head"><span>Good products</span><b>✓</b></div>
+          <strong id="goodCount">0</strong><small>accepted by quality gate</small>
+        </article>
+        <article class="metric panel accent-red">
+          <div class="metric-head"><span>Rejected</span><b>×</b></div>
+          <strong id="defectCount">0</strong><small id="defectReason">No defects recorded</small>
+        </article>
+        <article class="metric panel accent-amber">
+          <div class="metric-head"><span>First-pass yield</span><b>%</b></div>
+          <strong><span id="yieldPercent">100.0</span><em>%</em></strong><small>good / total products</small>
+        </article>
+      </section>
+
+      <section class="two-column">
+        <article class="panel process-panel">
+          <div class="panel-heading">
+            <div><p class="section-label">Live process</p><h2>Assembly sequence</h2></div>
+            <div class="product-chip">Product <strong id="productId">—</strong></div>
+          </div>
+          <div class="process-line" id="processLine">
+            <div class="stage" data-stage="0"><span class="stage-index">01</span><div class="stage-icon">▰</div><strong>Body feed</strong><small>Wooden blank</small></div>
+            <div class="connector"></div>
+            <div class="stage" data-stage="1"><span class="stage-index">02</span><div class="stage-icon">↦</div><strong>Core insertion</strong><small>Graphite alignment</small></div>
+            <div class="connector"></div>
+            <div class="stage" data-stage="2"><span class="stage-index">03</span><div class="stage-icon">◎</div><strong>Ferrule press</strong><small>Clamp force</small></div>
+            <div class="connector"></div>
+            <div class="stage" data-stage="3"><span class="stage-index">04</span><div class="stage-icon">◆</div><strong>Eraser insert</strong><small>Depth check</small></div>
+            <div class="connector"></div>
+            <div class="stage" data-stage="4"><span class="stage-index">05</span><div class="stage-icon">⌁</div><strong>Inspection</strong><small>Vision + length</small></div>
+            <div class="connector"></div>
+            <div class="stage" data-stage="5"><span class="stage-index">06</span><div class="stage-icon">⇄</div><strong>Sorting</strong><small>Accept / reject</small></div>
+          </div>
+          <div class="current-operation">
+            <span class="operation-dot"></span>
+            <div><small>CURRENT OPERATION</small><strong id="currentStage">Waiting for start</strong></div>
+            <div class="progress-track"><span id="stageProgress"></span></div>
+          </div>
+        </article>
+
+        <aside class="panel diagnostics-panel">
+          <div class="panel-heading compact"><div><p class="section-label">Diagnostics</p><h2>Machine health</h2></div></div>
+          <div class="diagnostic-list">
+            <div><span>Motor temperature</span><strong><b id="temperature">24.0</b> °C</strong><div class="gauge"><i id="tempGauge"></i></div></div>
+            <div><span>Last cycle time</span><strong><b id="cycleTime">0.00</b> s</strong><div class="gauge"><i id="cycleGauge"></i></div></div>
+            <div><span>Machine speed</span><strong><b id="speedValue">1.00</b> ×</strong><div class="gauge"><i id="speedGauge"></i></div></div>
+          </div>
+          <div class="db-card">
+            <div><span class="db-dot" id="dbDot"></span><div><strong>InfluxDB telemetry</strong><small id="dbStatus">Checking connection…</small></div></div>
+            <a href="http://localhost:3000/d/pencil-production/pencil-production-line" target="_blank" rel="noreferrer">Open Grafana ↗</a>
+          </div>
+        </aside>
+      </section>
+
+      <section class="lower-grid">
+        <article class="panel production-chart-panel">
+          <div class="panel-heading compact">
+            <div><p class="section-label">Trend</p><h2>Live production history</h2></div>
+            <div class="legend"><span class="good-key"></span>Good <span class="bad-key"></span>Rejected</div>
+          </div>
+          <canvas id="historyChart" width="900" height="220" aria-label="Production history chart"></canvas>
+        </article>
+
+        <article class="panel settings-panel">
+          <div class="panel-heading compact"><div><p class="section-label">Simulation</p><h2>Operator settings</h2></div></div>
+          <label>Machine speed <output id="speedOutput">1.00×</output><input id="speedRange" type="range" min="0.5" max="2" step="0.05" value="1"></label>
+          <label>Product defect probability <output id="defectOutput">8%</output><input id="defectRange" type="range" min="0" max="35" step="1" value="8"></label>
+          <div class="settings-actions"><button id="applySettings">Apply settings</button><button class="fault-test" data-action="inject-fault">Test fault</button></div>
+        </article>
+      </section>
+
+      <section class="two-column bottom-row">
+        <article class="panel table-panel">
+          <div class="panel-heading compact"><div><p class="section-label">Quality control</p><h2>Recent products</h2></div><span class="table-note">Newest first</span></div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>ID</th><th>Result</th><th>Cycle</th><th>Inspection detail</th></tr></thead>
+              <tbody id="productTable"><tr class="empty-row"><td colspan="4">No completed products yet</td></tr></tbody>
+            </table>
+          </div>
+        </article>
+
+        <article class="panel log-panel">
+          <div class="panel-heading compact"><div><p class="section-label">System events</p><h2>Operator log</h2></div><span class="live-label"><i></i>Live</span></div>
+          <div class="event-log" id="eventLog"></div>
+        </article>
+      </section>
+    </main>
+
+    <footer><span>100007801_Aly_AP</span><span>Automated Pencil Assembly Line</span><span>SRH University · June 2026</span></footer>
+  </div>
+  <div class="toast" id="toast" role="status"></div>
+  <script src="/app.js"></script>
+</body>
+</html>
