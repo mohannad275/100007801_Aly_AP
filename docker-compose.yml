@@ -1,0 +1,68 @@
+services:
+  influxdb:
+    image: influxdb:2.9
+    container_name: pencil-influxdb
+    ports:
+      - "8086:8086"
+    environment:
+      DOCKER_INFLUXDB_INIT_MODE: setup
+      DOCKER_INFLUXDB_INIT_USERNAME: ${INFLUXDB_USERNAME:-admin}
+      DOCKER_INFLUXDB_INIT_PASSWORD: ${INFLUXDB_PASSWORD:-PencilLine2026!}
+      DOCKER_INFLUXDB_INIT_ORG: ${INFLUXDB_ORG:-srh}
+      DOCKER_INFLUXDB_INIT_BUCKET: ${INFLUXDB_BUCKET:-pencil_production}
+      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: ${INFLUXDB_TOKEN:-srh-pencils-super-secret-token}
+    volumes:
+      - influxdb-data:/var/lib/influxdb2
+      - influxdb-config:/etc/influxdb2
+    healthcheck:
+      test: ["CMD", "influx", "ping", "--host", "http://localhost:8086"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:12.0.2
+    container_name: pencil-grafana
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD:-PencilGrafana2026!}
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      INFLUXDB_ORG: ${INFLUXDB_ORG:-srh}
+      INFLUXDB_BUCKET: ${INFLUXDB_BUCKET:-pencil_production}
+      INFLUXDB_TOKEN: ${INFLUXDB_TOKEN:-srh-pencils-super-secret-token}
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./grafana/dashboards:/var/lib/grafana/dashboards:ro
+    depends_on:
+      influxdb:
+        condition: service_healthy
+    restart: unless-stopped
+
+  app:
+    build: .
+    container_name: pencil-hmi
+    ports:
+      - "8000:8000"
+    environment:
+      INFLUXDB_ENABLED: "true"
+      INFLUXDB_URL: http://influxdb:8086
+      INFLUXDB_ORG: ${INFLUXDB_ORG:-srh}
+      INFLUXDB_BUCKET: ${INFLUXDB_BUCKET:-pencil_production}
+      INFLUXDB_TOKEN: ${INFLUXDB_TOKEN:-srh-pencils-super-secret-token}
+      DEFECT_PROBABILITY: ${DEFECT_PROBABILITY:-0.08}
+      MACHINE_SPEED: ${MACHINE_SPEED:-1.0}
+      TARGET_CYCLE_SECONDS: ${TARGET_CYCLE_SECONDS:-5.4}
+    depends_on:
+      influxdb:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  influxdb-data:
+  influxdb-config:
+  grafana-data:

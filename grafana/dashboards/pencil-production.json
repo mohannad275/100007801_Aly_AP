@@ -1,0 +1,101 @@
+{
+  "annotations": {"list": []},
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "datasource": {"type": "influxdb", "uid": "influxdb-pencils"},
+      "fieldConfig": {"defaults": {"color": {"mode": "thresholds"}, "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}, {"color": "red", "value": 55}]}, "unit": "celsius"}, "overrides": []},
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0},
+      "id": 1,
+      "options": {"legend": {"calcs": ["lastNotNull", "mean"], "displayMode": "table", "placement": "bottom", "showLegend": true}, "tooltip": {"mode": "single", "sort": "none"}},
+      "targets": [{"datasource": {"type": "influxdb", "uid": "influxdb-pencils"}, "query": "from(bucket: \"pencil_production\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"production_metrics\" and r._field == \"temperature\")\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> yield(name: \"mean\")", "refId": "A"}],
+      "title": "Motor Temperature",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {"type": "influxdb", "uid": "influxdb-pencils"},
+      "fieldConfig": {"defaults": {"color": {"mode": "thresholds"}, "mappings": [], "thresholds": {"mode": "absolute", "steps": [{"color": "blue", "value": null}]}, "unit": "short"}, "overrides": []},
+      "gridPos": {"h": 4, "w": 4, "x": 12, "y": 0},
+      "id": 2,
+      "options": {"colorMode": "background", "graphMode": "area", "justifyMode": "auto", "orientation": "auto", "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}, "showPercentChange": false, "textMode": "auto", "wideLayout": true},
+      "targets": [{"query": "from(bucket: \"pencil_production\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"production_metrics\" and r._field == \"total_count\")\n  |> last()", "refId": "A"}],
+      "title": "Total Produced",
+      "type": "stat"
+    },
+    {
+      "datasource": {"type": "influxdb", "uid": "influxdb-pencils"},
+      "fieldConfig": {"defaults": {"color": {"mode": "thresholds"}, "mappings": [], "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}]}, "unit": "short"}, "overrides": []},
+      "gridPos": {"h": 4, "w": 4, "x": 16, "y": 0},
+      "id": 3,
+      "options": {"colorMode": "background", "graphMode": "area", "justifyMode": "auto", "orientation": "auto", "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}, "showPercentChange": false, "textMode": "auto", "wideLayout": true},
+      "targets": [{"query": "from(bucket: \"pencil_production\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"production_metrics\" and r._field == \"good_count\")\n  |> last()", "refId": "A"}],
+      "title": "Good Products",
+      "type": "stat"
+    },
+    {
+      "datasource": {"type": "influxdb", "uid": "influxdb-pencils"},
+      "fieldConfig": {"defaults": {"color": {"mode": "thresholds"}, "mappings": [], "thresholds": {"mode": "absolute", "steps": [{"color": "red", "value": null}]}, "unit": "short"}, "overrides": []},
+      "gridPos": {"h": 4, "w": 4, "x": 20, "y": 0},
+      "id": 4,
+      "options": {"colorMode": "background", "graphMode": "area", "justifyMode": "auto", "orientation": "auto", "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}, "showPercentChange": false, "textMode": "auto", "wideLayout": true},
+      "targets": [{"query": "from(bucket: \"pencil_production\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"production_metrics\" and r._field == \"defect_count\")\n  |> last()", "refId": "A"}],
+      "title": "Rejected Products",
+      "type": "stat"
+    },
+    {
+      "datasource": {"type": "influxdb", "uid": "influxdb-pencils"},
+      "fieldConfig": {"defaults": {"color": {"mode": "thresholds"}, "mappings": [], "max": 100, "min": 0, "thresholds": {"mode": "absolute", "steps": [{"color": "red", "value": null}, {"color": "yellow", "value": 85}, {"color": "green", "value": 95}]}, "unit": "percent"}, "overrides": []},
+      "gridPos": {"h": 4, "w": 6, "x": 12, "y": 4},
+      "id": 5,
+      "options": {"minVizHeight": 75, "minVizWidth": 75, "orientation": "auto", "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}, "showThresholdLabels": false, "showThresholdMarkers": true, "sizing": "auto"},
+      "targets": [{"query": "from(bucket: \"pencil_production\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"production_metrics\" and r._field == \"yield_percent\")\n  |> last()", "refId": "A"}],
+      "title": "First-Pass Yield",
+      "type": "gauge"
+    },
+    {
+      "datasource": {"type": "influxdb", "uid": "influxdb-pencils"},
+      "fieldConfig": {"defaults": {"color": {"mode": "thresholds"}, "mappings": [{"options": {"0": {"color": "blue", "text": "IDLE"}, "1": {"color": "green", "text": "RUNNING"}, "2": {"color": "yellow", "text": "STOPPED"}, "3": {"color": "red", "text": "FAULT"}, "4": {"color": "red", "text": "E-STOP"}}, "type": "value"}], "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}]}, "unit": "none"}, "overrides": []},
+      "gridPos": {"h": 4, "w": 6, "x": 18, "y": 4},
+      "id": 6,
+      "options": {"colorMode": "background", "graphMode": "none", "justifyMode": "center", "orientation": "horizontal", "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}, "showPercentChange": false, "textMode": "value_and_name", "wideLayout": true},
+      "targets": [{"query": "from(bucket: \"pencil_production\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"production_metrics\" and r._field == \"state_code\")\n  |> last()", "refId": "A"}],
+      "title": "Machine State",
+      "type": "stat"
+    },
+    {
+      "datasource": {"type": "influxdb", "uid": "influxdb-pencils"},
+      "fieldConfig": {"defaults": {"color": {"mode": "palette-classic"}, "custom": {"axisCenteredZero": false, "axisColorMode": "text", "axisLabel": "", "axisPlacement": "auto", "barAlignment": 0, "drawStyle": "line", "fillOpacity": 12, "gradientMode": "none", "hideFrom": {"legend": false, "tooltip": false, "viz": false}, "insertNulls": false, "lineInterpolation": "linear", "lineWidth": 2, "pointSize": 5, "scaleDistribution": {"type": "linear"}, "showPoints": "never", "spanNulls": false, "stacking": {"group": "A", "mode": "none"}, "thresholdsStyle": {"mode": "off"}}, "mappings": [], "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}]}, "unit": "s"}, "overrides": []},
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8},
+      "id": 7,
+      "options": {"legend": {"calcs": ["lastNotNull", "mean"], "displayMode": "table", "placement": "bottom", "showLegend": true}, "tooltip": {"mode": "single", "sort": "none"}},
+      "targets": [{"query": "from(bucket: \"pencil_production\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"production_metrics\" and r._field == \"cycle_time\")\n  |> filter(fn: (r) => r._value > 0)\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)", "refId": "A"}],
+      "title": "Cycle Time",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {"type": "influxdb", "uid": "influxdb-pencils"},
+      "fieldConfig": {"defaults": {"color": {"mode": "continuous-GrYlRd"}, "custom": {"align": "auto", "cellOptions": {"type": "auto"}, "filterable": true, "inspect": false}, "mappings": [], "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}]}, "unit": "none"}, "overrides": []},
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8},
+      "id": 8,
+      "options": {"cellHeight": "sm", "footer": {"countRows": false, "fields": "", "reducer": ["sum"], "show": false}, "showHeader": true, "sortBy": []},
+      "targets": [{"query": "from(bucket: \"pencil_production\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"production_metrics\" and (r._field == \"machine_state\" or r._field == \"defect_reason\"))\n  |> last()", "refId": "A"}],
+      "title": "Latest Production Status",
+      "type": "table"
+    }
+  ],
+  "refresh": "5s",
+  "schemaVersion": 41,
+  "tags": ["SRH", "manufacturing", "pencil", "InfluxDB"],
+  "templating": {"list": []},
+  "time": {"from": "now-30m", "to": "now"},
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "Automated Pencil Production Line",
+  "uid": "pencil-production",
+  "version": 1,
+  "weekStart": ""
+}
